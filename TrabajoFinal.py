@@ -192,7 +192,28 @@ while True:
 
 		elif op == 5: # BINGO!!!
 			pass
-		elif op == 7: # Reiniciar juego
-			pass
-		elif op == 8: # Finalizar juego
-			pass
+		elif op == 6: # Reiniciar juego
+			confirmacion = input("Estás seguro en reiniciar el bingo? (y o yes para confirmar)> ")
+			confirmacion = confirmacion.lower()
+			if confirmacion=="y" or confirmacion=="yes":
+				numeros = [i for i in range(1, MAX_NUM_BINGO+1)]
+				mensaje = mensajes["reinicio"]
+				jugadores.clear()
+				descalificados.clear()
+				juego_iniciado = False
+				bingo = False
+				giros.clear()
+				jugador_bingo = 0
+				tiempo_inicio = False
+		elif op == 7: # Finalizar juego
+			if bingo:
+				break
+			confirmacion = input("Estás seguro que deseas salir sin terminar el bingo? (y o yes para confirmar)> ")
+			confirmacion = confirmacion.lower()
+			if confirmacion=="y" or confirmacion=="yes":
+				break
+		elif op == 8: # Mostrar pozo actual
+			pozo = 0
+			for jugador in jugadores:
+				pozo += jugador[1]*PRECIO_BINGO
+			mensaje = "Pozo actual: S/. " + str(pozo)
