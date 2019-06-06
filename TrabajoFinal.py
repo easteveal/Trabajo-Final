@@ -70,11 +70,40 @@ while True:
 		pass
 	if (0<=op<=8 and not bingo) or (6<=op<=7):
 		if op == 1: # Registrar jugador
-			pass
+			nombre = ""
+			while True:
+				system("cls")
+				#TODO Añadir la parte de cancelar ingreso de nuevo jugador mediante un sub menu o cuando el texto esté vacío
+				print("Jugador #"+str(len(jugadores)+1))
+				if (len(nombre)==0):
+					nombre = input("Ingrese su nombre: ")
+					if len(nombre)==0: continue
+				else:
+					print("Ingrese su nombre: " + nombre)
+				try:
+					num_cartillas = int(input("Ingrese el número de cartillas que desea (de 1 a 3): "))
+					if num_cartillas>3 or num_cartillas<1: raise ValueError("Solo puede ser de 1 a 3 cartillas")
+					jugadores.append([nombre, num_cartillas])
+					mensaje = mensajes["jugador_registrado"] + "#" + str(len(jugadores)) + "> " + jugadores[-1][0] + " con " + str(jugadores[-1][1]) + " cartilla(s)."
+					break
+				except:
+					pass
 		elif op == 2: # Empezar a jugar
 			pass
 		elif op == 3: # Siguiente giro
-			pass
+			if not juego_iniciado:
+				mensaje = mensajes["juego_no_iniciado"]
+			elif jugador_bingo>0: 
+				mensaje = mensajes["no_giro_jugador_bingo"] + "\n"
+				mensaje += mensajes["bingo_cantado"] + " Lo cantó el jugador número " + str(jugador_bingo) + ": " + jugadores[jugador_bingo-1][0] + " (" + str(jugadores[jugador_bingo-1][1]) + ")"
+			else:
+				# TODO condicionar cuando la cantidad de número a elegir sea mayor a 0
+				num_giro = random.choice(numeros)
+				numeros.remove(num_giro)
+				giros.append(num_giro)
+				num_giro_str = str(num_giro)
+				if len(num_giro_str)==1: num_giro_str = "0" + num_giro_str
+				mensaje = mensajes["nuevo_numero"] + "#>" + num_giro_str
 		elif op == 4: # Mostrar resumen
 			if not juego_iniciado:
 				mensaje = mensajes["juego_no_iniciado"]
@@ -163,7 +192,7 @@ while True:
 
 		elif op == 5: # BINGO!!!
 			pass
-		elif op == 7:
+		elif op == 7: # Reiniciar juego
 			pass
-		elif op == 8:
+		elif op == 8: # Finalizar juego
 			pass
