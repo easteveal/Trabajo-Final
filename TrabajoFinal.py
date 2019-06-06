@@ -89,7 +89,25 @@ while True:
 				except:
 					pass
 		elif op == 2: # Empezar a jugar
-			pass
+			if not juego_iniciado:
+				if len(jugadores)>0 and len(jugadores)>len(descalificados):
+					juego_iniciado = True
+					mensaje = mensajes["inicio_juego"]
+					tiempo_inicio = time.time()
+				else:
+					mensaje = mensajes["sin_jugadores"]
+			else:
+				dif_tiempo = int(time.time() - tiempo_inicio)
+				horas = int(dif_tiempo/3600)
+				minutos = int((dif_tiempo-3600*horas)/60)
+				mensaje = mensajes["tiempo_iniciado"]
+				if horas>0:
+					mensaje += " " + str(horas) + " hora(s)"
+				if minutos>0:
+					mensaje += " " + str(minutos) + " minuto(s)"
+				if minutos==0 and horas==0:
+					mensaje += " " + str(dif_tiempo%60) + " segundo(s)"
+
 		elif op == 3: # Siguiente giro
 			if not juego_iniciado:
 				mensaje = mensajes["juego_no_iniciado"]
@@ -191,7 +209,33 @@ while True:
 					mensaje = mensajes["cero_giros"]
 
 		elif op == 5: # BINGO!!!
-			pass
+			if not juego_iniciado:
+				mensaje = mensajes["juego_no_iniciado"]
+			elif len(giros)>= 18:
+				if jugador_bingo>0:
+					mensaje = mensajes["bingo_cantado"] + " Lo cantó el jugador número " + str(jugador_bingo) + ": " + jugadores[jugador_bingo-1][0] + " (" + str(jugadores[jugador_bingo-1][1]) + ")"
+				else:
+					resultado = mensajes["lista_jugadores"]+"\n"
+					resultado += "# [número]> [nombre] ([cartillas])\n"
+					for i in range(len(jugadores)):
+						if (descalificados.count(i+1)==0):
+							resultado += "# " + str(i+1)  + "> " + jugadores[i][0] + " (" + str(jugadores[i][1]) + ")\n"
+					id = 0
+					while True:
+						system("cls")
+						print(resultado)
+						try:
+							id = int(input("Ingrese el número de jugador que cantó BINGO> "))
+							if descalificados.count(id)>0:
+								ValueError("Ese jugador fue descalificado")
+							if id>0 and descalificados.count(id)==0:
+								mensaje = mensajes["bingo_cantado"] + " Lo cantó el jugador número " + str(id) + ": " + jugadores[id-1][0] + " (" + str(jugadores[id-1][1]) + ")"
+								jugador_bingo = id
+								break
+						except:
+							pass
+			else:
+				mensaje = mensajes["todavia_no_bingo"]
 		elif op == 6: # Reiniciar juego
 			confirmacion = input("Estás seguro en reiniciar el bingo? (y o yes para confirmar)> ")
 			confirmacion = confirmacion.lower()
